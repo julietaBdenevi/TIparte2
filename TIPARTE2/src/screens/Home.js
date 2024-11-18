@@ -43,7 +43,7 @@ class Home extends Component{
     render() {
         return (
           <View style={styles.container}>
-                <Text>{`Bienvenido ${auth.currentUser.email}`}</Text>
+                <Text>{`Bienvenido `}</Text> {/*${auth.currentUser.email} ESTO VA DESPJUES DE BIENVENIDO*/}
                 <Text style={styles.heading}>Home</Text>  
                 {
                     this.state.posts.length === 0 ? (
