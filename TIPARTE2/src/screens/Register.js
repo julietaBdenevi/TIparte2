@@ -65,13 +65,10 @@ class Register extends Component{
                     <Text style={styles.botonTexto}>Registrar</Text>
                 </TouchableOpacity>
 
-
-
-                <Text>Navegación cruzada a Login:</Text>
                 <TouchableOpacity onPress={() => this.props.navigation.navigate("Login")} style={styles.botonLogin}>
                     <Text style={styles.botonTextoLogin}>Ya tengo cuenta</Text>
                 </TouchableOpacity>
-            </View>
+            </View>//el login de juli va aca adentro
         )
     }
 }
