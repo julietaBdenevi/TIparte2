@@ -1,9 +1,6 @@
 import { Component } from "react";
-import { StyleSheet, TextInput, TouchableOpacity } from "react-native";
-import { Text } from "react-native";
-import { View } from "react-native";
+import { StyleSheet, TextInput, TouchableOpacity, Text, View } from "react-native";
 import { auth, db } from "../firebase/config";
-
 
 class Register extends Component{
     constructor(props){
@@ -33,7 +30,8 @@ class Register extends Component{
                 })
             })
             .then(()=> this.props.navigation.navigate("HomeMenu"))
-            .catch((error) => this.setState({error: "fallo el registro", error})) 
+            
+            .catch((error) => console.error("Error en el registro: ", error.message))//this.setState({error: "fallo el registro", error})) 
     }
 
     render(){
@@ -44,27 +42,28 @@ class Register extends Component{
                 {/* FORMULARIO DE REGISTER */}
                 <TextInput style={styles.field}
                 keyboardType="email-address"
-                placeholder="email"
+                placeholder="Email"
                 onChangeText={ text => this.setState({email: text})}
                 value={this.state.email}
                 />
                 <TextInput style={styles.field}
                 keyboardType="default"
-                placeholder="user name"
+                placeholder="Username"
                 onChangeText={ text => this.setState({userName: text})}
                 value={this.state.userName}
                 />
                 <TextInput style={styles.field}
                 keyboardType="default"
-                placeholder="password"
+                placeholder="Password"
                 secureTextEntry={true}
                 onChangeText={ text => this.setState({password: text})}
                 value={this.state.password}
                 />
                 <TouchableOpacity onPress={()=> this.register()} style={styles.boton}>
                     <Text style={styles.botonTexto}>Registrar</Text>
+                  
                 </TouchableOpacity>
-
+                <Text><br></br></Text>
                 <TouchableOpacity onPress={() => this.props.navigation.navigate("Login")} style={styles.botonLogin}>
                     <Text style={styles.botonTextoLogin}>Ya tengo cuenta</Text>
                 </TouchableOpacity>
@@ -91,35 +90,34 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     boton: {
-        backgroundColor: "#28a745",
+        backgroundColor: "#DC143C",
         paddingHorizontal:10,
         paddingVertical: 6,
         textAlign: "center",
         borderRadius: 4,
         borderWidth: 1,
         borderStyle: "solid",
-        borderColor: "#28a745"
+        borderColor: "#DC143C"
     },
     botonTexto: {
-        color: "#fff"
+        color: "DC143C"
     },
     titulo: {
         fontWeight: "bold",
         fontSize: 20
     },
     botonLogin: {
-        backgroundColor: "blue",
+        backgroundColor: "#D3D3D3",
         paddingHorizontal:10,
         paddingVertical: 6,
         textAlign: "center",
         borderRadius: 4,
         borderWidth: 1,
         borderStyle: "solid",
-        borderColor: "blue"
+        borderColor: "#D3D3D3"
     },
     botonTextoLogin: {
-        color: "white",
-        fontWeight: "bold"
+        color: "black",
     },
 
 })

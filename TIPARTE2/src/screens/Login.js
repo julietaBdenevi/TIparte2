@@ -51,17 +51,12 @@ class Login extends Component {
         <TouchableOpacity onPress={() => this.handleSubmit() }  style={[styles.button, styles.buttonSecondary]}>
           <Text>Acceder</Text>
         </TouchableOpacity>
-        <Text>Navegación cruzada a Register: </Text>
         <TouchableOpacity
           onPress={() => this.props.navigation.navigate("Register")}
           style={styles.button}
         >
           <Text>No tengo cuenta</Text>
-        </TouchableOpacity>
-        <Text>
-          Navegación cruzada a ingresar a la app. Este paso se hará
-          automaticamente cuando veamos la funcionalidad de login{" "}
-        </Text>      
+        </TouchableOpacity>     
       </View>
     );
   }
@@ -77,7 +72,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   button: {
-    backgroundColor: "#51b9e9",
+    backgroundColor: "#D3D3D3",
     borderRadius: 5,
     padding: 10,
     width: "100%",
@@ -85,7 +80,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   buttonSecondary: {
-    backgroundColor: "#ffa500",
+    backgroundColor: "#DC143C",
   },
 });
 
