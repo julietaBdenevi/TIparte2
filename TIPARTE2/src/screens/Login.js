@@ -18,18 +18,23 @@ class Login extends Component {
       error: "",
     };
   }
-
+  //rememberMe:
   componentDidMount(){
-    auth.onAuthStateChanged(user => console.log('El usuario es:', JSON.stringify(user,null,4)))
+    auth.onAuthStateChanged(user => { if (user) { this.props.navigation.navigate("HomeMenu")}})
   }
 
   handleSubmit() {
     
-    auth
+    if (!this.state.email.includes("@")){this.setState({error: 'Email no válido'})}
+    else if (this.state.password.length < 6) { this.setState ({ error: 'La contraseña debe tener mínimo 6 caracteres'})}
+    else {
+      auth
       .signInWithEmailAndPassword(this.state.email, this.state.password)
       .then((response) => this.setState({ logued: true }))
       .then( ()=>  this.props.navigation.navigate("HomeMenu"))
       .catch((error) => this.setState({ error: "Fallo el login" }));    
+    }
+    
   }
 
   render() {

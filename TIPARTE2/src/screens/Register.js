@@ -15,21 +15,21 @@ class Register extends Component{
     }
 
     componentDidMount(){
-        auth.onAuthStateChanged( user => console.log("register: el usuario es: ", user.email))
+        auth.onAuthStateChanged( user => console.log("register: el usuario es: ", user.email)) // NO TOMA ESTE 'USER.EMAIL'
     }
 
-    register(){
+    register(){ // sería el handleSubmit
         auth.createUserWithEmailAndPassword(this.state.email, this.state.password)
             .then((response) => {
-                this.setState({registered: true})
+                this.setState({registered: true}),
                 db.collection("users").add({
-                    owner: this.state.email, // creo que no hace falta
+                    contra: this.state.password, //PASSWORD
                     email: this.state.email,
                     nombre: this.state.userName, 
                     createdAt: Date.now()
                 })
             })
-            .then(()=> this.props.navigation.navigate("HomeMenu"))
+            .then(()=> this.props.navigation.navigate("Login"))
             
             .catch((error) => console.error("Error en el registro: ", error.message))//this.setState({error: "fallo el registro", error})) 
     }
