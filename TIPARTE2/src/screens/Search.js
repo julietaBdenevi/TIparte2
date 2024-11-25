@@ -1,53 +1,71 @@
-import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, TextInput, FlatList } from 'react-native'
+import React, { Component } from 'react';
+import { View, Text, TextInput, FlatList } from 'react-native';
 import { db } from "../firebase/config";
 
-
 export class Search extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      users: [],
+      busqueda: ""
+    };
+  }
 
+  componentDidMount() {
+    db.collection("users").onSnapshot((docs) => {
+      let users = [];
 
- constructor(props) {
-   super(props);
-   this.state = {
-     users: [],
-     busqueda: ""
-   }
- }
+      docs.forEach((doc) => {
+        users.push({ id: doc.id, data: doc.data() });
+      });
 
+      this.setState({
+        users: users
+      });
 
- componentDidMount() {
-   db.collection("users")
-     .onSnapshot(docs => {
-       let users = [];
+      console.log("Snapshot");
+    });
+  }
 
+  handleSearch() {
+    const { busqueda, users } = this.state;
+    if (busqueda.trim() === "") {
+      return []; 
+    }
+    return users.filter((usuario) => {
+      return (
+        usuario.data.nombre &&
+        usuario.data.nombre.toLowerCase().includes(busqueda.toLowerCase())
+      );
+    });
+  }
 
-       docs.forEach(doc => {
-         users.push({ id: doc.id, data: doc.data() })
-       });
-       console.log("Sanpshot");
-      
-     })
- }
+  render() {
+    console.log(this.state.users);
 
+    const resultadosBusqueda = this.handleSearch();
 
- handleSearch() {
-   return this.state.users.filter((user) => {return user.data.username.toLowerCase().includes(this.state.busqueda.toLowerCase())})
- }
-
-
- render() {
-   console.log(this.state.users);
-  
-   const resultadosBusqueda = this.handleSearch()
-   return (
-     <View>
-       <Text>Buscador de usuarios</Text>
-       <TextInput placeholder='Buscador' keyboardType='default' value={this.state.busqueda} onChangeText={(texto) => this.setState({busqueda: texto})}/>
-       {resultadosBusqueda.length === 0 ? (<Text>No hay resultados</Text>) : (<FlatList data={this.state.posteos} keyExtractor={(item) => item.id.toString()} renderItem={({item}) => (item.data.username)}/>)}
-     </View>
-   )
- }
+    return (
+      <View>
+        <Text>Buscador de usuarios</Text>
+        <TextInput
+          placeholder="Buscador"
+          keyboardType="default"
+          value={this.state.busqueda}
+          onChangeText={(texto) => this.setState({ busqueda: texto })}
+        />
+        {resultadosBusqueda.length === 0 && this.state.busqueda.trim() !== "" ? (
+          <Text>El user name no existe</Text>
+        ) : (
+          <FlatList
+            data={resultadosBusqueda}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => <Text>{item.data.nombre}</Text>}
+          />
+        )}
+      </View>
+    );
+  }
 }
 
-
-export default Search
+export default Search;
