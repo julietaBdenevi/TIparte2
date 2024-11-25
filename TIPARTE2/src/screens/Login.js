@@ -6,7 +6,7 @@ import {
   View,
   TextInput,
 } from "react-native";
-import {auth} from '../firebase/config'
+import { auth } from '../firebase/config'
 
 class Login extends Component {
   constructor() {
@@ -19,23 +19,25 @@ class Login extends Component {
     };
   }
   //rememberMe:
-  componentDidMount(){
-    auth.onAuthStateChanged(user => { if (user) { this.props.navigation.navigate("HomeMenu")}})
+  componentDidMount() {
+    auth.onAuthStateChanged(user => { if (user) { this.props.navigation.navigate("HomeMenu") } })
   }
 
   handleSubmit() {
-    
-    if (!this.state.email.includes("@")){this.setState({error: 'Email no válido'})}
-    else if (this.state.password.length < 6) { this.setState ({ error: 'La contraseña debe tener mínimo 6 caracteres'})}
-    else {
-      auth
+    auth
       .signInWithEmailAndPassword(this.state.email, this.state.password)
-      .then((response) => this.setState({ logued: true }))
-      .then( ()=>  this.props.navigation.navigate("HomeMenu"))
-      .catch((error) => this.setState({ error: "Fallo el login" }));    
-    }
-    
+      .then((response) => {
+        console.log("Inicio de sesión exitoso: ", response);
+        this.props.navigation.navigate("HomeMenu");
+      })
+      .catch((error) => {
+        console.error("Error al iniciar sesión:", error); 
+        this.setState({ error: error.message  });
+      });
   }
+  
+      
+
 
   render() {
     return (
@@ -53,7 +55,11 @@ class Login extends Component {
           onChangeText={(text) => this.setState({ password: text })}
           value={this.state.password}
         />
-        <TouchableOpacity onPress={() => this.handleSubmit() }  style={[styles.button, styles.buttonSecondary]}>
+        {this.state.error !== "" && (
+          <Text style={{ color: "red", marginTop: 10 }}>{this.state.error}</Text>
+        )}
+
+        <TouchableOpacity onPress={() => this.handleSubmit()} style={[styles.button, styles.buttonSecondary]}>
           <Text>Acceder</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -61,7 +67,7 @@ class Login extends Component {
           style={styles.button}
         >
           <Text>No tengo cuenta</Text>
-        </TouchableOpacity>     
+        </TouchableOpacity>
       </View>
     );
   }
