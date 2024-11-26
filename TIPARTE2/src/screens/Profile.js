@@ -16,7 +16,7 @@ class Profile extends Component {
         const currentUser = auth.currentUser;
 
         if (currentUser) {
-            db.collection("users") 
+            db.collection("users")
                 .where("email", "==", currentUser.email)
                 .onSnapshot(snapshot => {
                     snapshot.forEach(doc => { 
@@ -25,13 +25,12 @@ class Profile extends Component {
                 });
 
             db.collection("posts")
-                .where("user", "==", currentUser.email)  
+                .where("user", "==", currentUser.email)
                 .onSnapshot(snapshot => {
                     const posts = snapshot.docs.map(doc => ({
                         id: doc.id,
                         description: doc.data().descripcion
                     }));
-                    console.log(posts); 
                     this.setState({ posts, totalPosts: posts.length });
                 }, (error) => {
                     console.error(error);
@@ -54,51 +53,63 @@ class Profile extends Component {
 
         return (
             <View style={styles.container}>
-                <Text style={styles.titulo}>Mi Perfil</Text>
-                <Text style={styles.info}>Nombre de usuario: {user.nombre}</Text>
-                <Text style={styles.info}>Email: {user.email}</Text>
-                <Text style={styles.info}>Total de posteos: {totalPosts}</Text>
+                <View style={styles.formContainer}>
+                    <Text style={styles.titulo}>Mi Perfil</Text>
+                    <Text style={styles.info}>Nombre de usuario: {user.nombre}</Text>
+                    <Text style={styles.info}>Email: {user.email}</Text>
+                    <Text style={styles.info}>Total de posteos: {totalPosts}</Text>
 
-                <FlatList
-                    data={posts}
-                    keyExtractor={item => item.id}
-                    renderItem={({ item }) => (
-                        <View style={styles.postContainer}>
-                            <Text style={styles.postText}>{item.description}</Text>
-                            <TouchableOpacity
-                                onPress={() => this.eliminarPost(item.id)}
-                                style={styles.botonEliminar}
-                            >
-                                <Text style={styles.botonTexto}>Eliminar post</Text>
-                            </TouchableOpacity>
-                        </View>
-                    )}
-                />
+                    <FlatList
+                        data={posts}
+                        keyExtractor={item => item.id}
+                        renderItem={({ item }) => (
+                            <View style={styles.postContainer}>
+                                <Text style={styles.postText}>{item.description}</Text>
+                                <TouchableOpacity
+                                    onPress={() => this.eliminarPost(item.id)}
+                                    style={styles.botonEliminar}
+                                >
+                                    <Text style={styles.botonTexto}>Eliminar post</Text>
+                                </TouchableOpacity>
+                            </View>
+                        )}
+                    />
 
-                <TouchableOpacity onPress={this.logout} style={styles.botonLogout}> 
-                    <Text style={styles.botonTextoLogout}>Logout</Text>
-                </TouchableOpacity> 
-            </View> //botón de deslogueo
+                    <TouchableOpacity onPress={this.logout} style={styles.botonLogout}>
+                        <Text style={styles.botonTextoLogout}>Logout</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
         );
     }
 }
+
 const styles = StyleSheet.create({
     container: {
-        margin: 20,
         flex: 1,
+        justifyContent: "center",
         alignItems: "center",
-        justifyContent: "flex-start",
+        backgroundColor: "#121212", // Fondo oscuro similar al de TikTok
+    },
+    formContainer: {
+        width: '90%', // Contenedor centrado con un 90% del ancho de la pantalla
+      
+        borderRadius: 10,
+        padding: 20,
+        alignItems: 'center', // Centrado de todos los elementos dentro del formulario
     },
     titulo: {
-        fontSize: 30,
-        fontWeight: "700",
-        marginBottom: 10,
-        color: "#DC143C", // Rojo vibrante para el título
+        fontSize: 28,
+        fontWeight: "bold",
+        color: "#fff", // Texto blanco para buen contraste
+        marginBottom: 20,
+        textAlign: "center",
     },
     info: {
         fontSize: 16,
-        color: "#333333", // Gris oscuro para texto
-        marginBottom: 5,
+        color: "#fff", // Blanco para el texto
+        marginBottom: 10,
+        textAlign: "center",
     },
     postContainer: {
         backgroundColor: "#F5F5F5", // Gris claro para destacar los posts
@@ -112,7 +123,7 @@ const styles = StyleSheet.create({
         color: "#000000", // Negro para el texto de los posts
     },
     botonEliminar: {
-        backgroundColor: "#DC143C", // Rojo vibrante para el botón de eliminar
+        backgroundColor: "#fe2c55", // Rojo vibrante para el botón de eliminar
         borderRadius: 5,
         padding: 10,
         alignItems: "center",
@@ -123,7 +134,7 @@ const styles = StyleSheet.create({
         fontWeight: "700",
     },
     botonLogout: {
-        backgroundColor: "#D3D3D3", // Gris claro para el botón de logout
+        backgroundColor: "#fe2c55", // Rojo vibrante para el botón de logout
         borderRadius: 5,
         padding: 10,
         alignItems: "center",
@@ -131,8 +142,9 @@ const styles = StyleSheet.create({
         width: "100%",
     },
     botonTextoLogout: {
-        color: "#000000", // Negro para el texto del botón de logout
+        color: "#fff", // Blanco para el texto del botón de logout
         fontWeight: "700",
+        textAlign: "center",
     },
 });
 
