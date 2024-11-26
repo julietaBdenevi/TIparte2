@@ -25,7 +25,7 @@ class Profile extends Component {
                 });
 
             db.collection("posts")
-                .where("owner", "==", currentUser.email)  
+                .where("user", "==", currentUser.email)  
                 .onSnapshot(snapshot => {
                     const posts = snapshot.docs.map(doc => ({
                         id: doc.id,
